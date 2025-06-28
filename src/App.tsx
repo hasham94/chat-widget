@@ -4,7 +4,7 @@ const App = () => {
 
   return (
     <>
-      <ChatWidget />
+      <ChatWidget variant='drawer' />
     </>
   )
 }
