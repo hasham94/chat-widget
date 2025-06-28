@@ -1,11 +1,47 @@
 # React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A customizable chat widget component built with React and TypeScript using Vite.
+Supports chat interaction with large language models (LLMs), local message persistence, and theming.
 
-Currently, two official plugins are available:
+## Features
+Simple React + TypeScript + Vite setup
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Customizable UI: colors, icons, modes, and varaints
+
+Basic chat interaction powered by Hugging Face or other LLM APIs
+
+Local persistence of chat messages with localStorage
+
+Maintenance mode disabling input with a warning banner
+
+## Installation
+
+npm install @hasham94/chat-widget2
+# or
+yarn add @hasham94/chat-widget2
+
+## Usage
+
+```tsx
+import React from "react";
+import ChatWidget from "@hasham94/chat-widget2";
+
+function App() {
+  return (
+    <ChatWidget
+      primaryColor="#5C6BC0"
+      maintenanceMode={false}
+      icon={<YourCustomIcon />}
+      variant="drawer"
+      apiKey='<hugging face api key>'
+    />
+  );
+}
+
+export default App;
+```
+
+
 
 ## Chat Configuration
 
