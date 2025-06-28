@@ -1,4 +1,4 @@
-import ChatWidget from "./components/ChatWidget"
+import ChatWidget from '@hasham94/ai-chat-widget'
 
 const App = () => {
 
