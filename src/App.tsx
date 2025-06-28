@@ -4,7 +4,7 @@ const App = () => {
 
   return (
     <>
-      <ChatWidget variant="bubble" apiKey='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' />
+      <ChatWidget variant="bubble" apiKey='' />
     </>
   )
 }
