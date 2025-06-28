@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Logo from './ui/Logo'
 import { ChatDialogProps, MessageI } from "../types/chatdialog"
 import { getLLMResponse } from '../api/chat';
+
+const STORAGE_KEY = "ai_chat_widget_messages";
 
 const ChatDialog: React.FC<ChatDialogProps> = ({
     onClose,
@@ -25,7 +27,7 @@ const ChatDialog: React.FC<ChatDialogProps> = ({
 
             const newMessage = { sender: "user", text: input };
             const reply = await getLLMResponse(input, apiKey);
-            setMessages([
+            setMessages(() => [
                 ...messages,
                 newMessage,
                 { sender: "bot", text: reply },
@@ -37,6 +39,20 @@ const ChatDialog: React.FC<ChatDialogProps> = ({
             setIsLoading(false)
         }
     };
+
+    useEffect(() => {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored) {
+            setMessages(() => JSON.parse(stored));
+        }
+    }, []);
+
+    // Save messages to localStorage when new question is asked
+    useEffect(() => {
+        if (messages.length > 1) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
+        }
+    }, [messages]);
 
     return (
         <div className={`bg-white w-96 ${isDrawer ? 'h-screen' : 'h-142 rounded-t-2xl'}  shadow-xl flex flex-col border border-gray-200`}>
@@ -63,8 +79,6 @@ const ChatDialog: React.FC<ChatDialogProps> = ({
                 <span className="text-sm font-extralight">Ask me anything</span>
             </div>
 
-
-
             {isUnderMaintenance ? (
                 <div className="flex-1 text-yellow-800 px-4 py-8 text-sm text-center">
                     This service is undergoing scheduled maintenance.
@@ -83,8 +97,8 @@ const ChatDialog: React.FC<ChatDialogProps> = ({
                             {msg.text}
                         </div>
                     ))}
-                </div>}
-
+                </div>
+            }
 
             {isError && <span className="bg-white px-3 text-xs text-red-400">!Please try again</span>}
             {isLoading && <span className="bg-white px-3 text-xs text-gray-400">Searching...</span>}
