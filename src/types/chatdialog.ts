@@ -1,6 +1,12 @@
 export interface ChatDialogProps {
     onClose: () => void;
-    primaryColor: string;
     isUnderMaintenance: boolean;
     isOnline: boolean;
+    isDrawer?: boolean;
+    apiKey: string;
 };
+
+export interface MessageI {
+    sender: string;
+    text: string;
+}

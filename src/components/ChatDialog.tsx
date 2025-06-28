@@ -1,34 +1,48 @@
 import { useState } from "react";
 import Logo from './ui/Logo'
-import { ChatDialogProps } from "../types/chatdialog"
+import { ChatDialogProps, MessageI } from "../types/chatdialog"
+import { getLLMResponse } from '../api/chat';
 
 const ChatDialog: React.FC<ChatDialogProps> = ({
     onClose,
-    primaryColor,
     isUnderMaintenance,
-    isOnline
+    isOnline,
+    isDrawer,
+    apiKey
 }) => {
-    const [messages, setMessages] = useState([
+    const [messages, setMessages] = useState<MessageI[]>([
         { sender: "bot", text: "Hello! How can I help you today?" },
     ]);
-    const [input, setInput] = useState("");
+    const [input, setInput] = useState<string>("");
+    const [isLoading, setIsLoading] = useState<boolean>(false)
+    const [isError, setIsError] = useState<string>('')
 
-    const sendMessage = () => {
-        if (!input.trim() || isUnderMaintenance) return;
-        const newMessage = { sender: "user", text: input };
-        setMessages([
-            ...messages,
-            newMessage,
-            { sender: "bot", text: "Thanks for your message!" },
-        ]);
-        setInput("");
+    const sendMessage = async () => {
+        try {
+            setIsError('')
+            setIsLoading(true)
+            if (!input.trim() || isUnderMaintenance) return;
+
+            const newMessage = { sender: "user", text: input };
+            const reply = await getLLMResponse(input, apiKey);
+            setMessages([
+                ...messages,
+                newMessage,
+                { sender: "bot", text: reply },
+            ]);
+            setInput("");
+        } catch (err) {
+            setIsError(err as string)
+        } finally {
+            setIsLoading(false)
+        }
     };
 
     return (
-        <div className="bg-white w-96 h-142 rounded-t-2xl shadow-xl flex flex-col border border-gray-200">
+        <div className={`bg-white w-96 ${isDrawer ? 'h-screen' : 'h-142 rounded-t-2xl'}  shadow-xl flex flex-col border border-gray-200`}>
             <div className="flex items-center justify-between rounded-t-2xl border-b border-gray-200 px-3 py-4">
                 <div className="flex items-center gap-2 relative">
-                    <div className={`bg-[${primaryColor}] rounded-full p-1`}>
+                    <div className={`bg-[#6f33b7] rounded-full p-1`}>
                         <Logo />
                     </div>
                     <span className="text-sm font-semibold">Eloquent AI</span>
@@ -42,7 +56,7 @@ const ChatDialog: React.FC<ChatDialogProps> = ({
             </div>
 
             <div className="flex flex-col py-7 px-2 gap-1 text-center items-center justify-center">
-                <div className={`bg-[${primaryColor}] w-13 flex items-center justify-center p-3 `}>
+                <div className={`bg-[#6f33b7] w-13 flex items-center justify-center p-3 `}>
                     <Logo />
                 </div>
                 <span className="text-sm font-semibold">Eloquent AI responds instantly</span>
@@ -62,7 +76,7 @@ const ChatDialog: React.FC<ChatDialogProps> = ({
                         <div
                             key={idx}
                             className={`p-2 rounded-lg text-sm w-fit max-w-70 break-words ${msg.sender === "bot"
-                                ? `bg-[${primaryColor}] text-white self-end text-right ml-auto`
+                                ? `bg-[#6f33b7] text-white self-end text-right ml-auto`
                                 : "bg-gray-200 self-start text-left"
                                 }`}
                         >
@@ -72,7 +86,8 @@ const ChatDialog: React.FC<ChatDialogProps> = ({
                 </div>}
 
 
-
+            {isError && <span className="bg-white px-3 text-xs text-red-400">!Please try again</span>}
+            {isLoading && <span className="bg-white px-3 text-xs text-gray-400">Searching...</span>}
             <div className="relative flex p-2 gap-2">
                 <textarea
                     className={`max-h-[3.5rem] flex-1 border border-gray-300 rounded-4xl pl-3 pr-24 py-3 text-sm focus:outline-none
@@ -81,14 +96,15 @@ const ChatDialog: React.FC<ChatDialogProps> = ({
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && (e.preventDefault(), sendMessage())}
-                    disabled={isUnderMaintenance}
+                    disabled={isUnderMaintenance || isLoading}
                     rows={2}
                 />
 
                 <button
-                    className={`absolute right-4 bottom-[14px] px-4 py-1 rounded-4xl text-white disabled:bg-gray-400 disabled:cursor-not-allowed bg-[${primaryColor}]`}
+                    className={`absolute right-4 bottom-[14px] px-4 py-1 rounded-4xl 
+                        text-white disabled:bg-gray-400 disabled:cursor-not-allowed bg-[#6f33b7]`}
                     onClick={sendMessage}
-                    disabled={isUnderMaintenance}
+                    disabled={isUnderMaintenance || isLoading}
                 >
                     Send
                 </button>
