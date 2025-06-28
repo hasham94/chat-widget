@@ -37,7 +37,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
                 }
             </div>
 
-            <Button onClick={() => setIsOpen(true)} isDrawer={isDrawer} icon={icon} />
+            {!isOpen && <Button onClick={() => setIsOpen(true)} isDrawer={isDrawer} icon={icon} />}
         </div>
     );
 }
