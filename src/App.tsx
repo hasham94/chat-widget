@@ -1,8 +1,10 @@
+import ChatWidget from "./components/ChatWidget"
+
 const App = () => {
 
   return (
     <>
-      Chat Widget
+      <ChatWidget />
     </>
   )
 }
