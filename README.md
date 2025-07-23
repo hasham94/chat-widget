@@ -56,3 +56,6 @@ export default App;
 
 ## Hugging Face Integration
 https://huggingface.co/
+
+## Link to published package
+https://www.npmjs.com/package/@hasham94/ai-chat-widget

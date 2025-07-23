@@ -68,7 +68,7 @@ const ChatDialog: React.FC<ChatDialogProps> = ({
                     <div className={`bg-[#6f33b7] rounded-full p-1`}>
                         <Logo />
                     </div>
-                    <span className="text-sm font-semibold">Eloquent AI</span>
+                    <span className="text-sm font-semibold">AI Assistant</span>
                     <span className="absolute bottom-0 left-6 flex size-3">
                         <span className={`absolute inline-flex h-full w-full rounded-full 
                             ${isOnline ? 'bg-green-500' : 'bg-red-600'} opacity-75 border border-gray-600 ${!isOnline ? 'animate-ping' : ''}`}></span>
@@ -102,7 +102,7 @@ const ChatDialog: React.FC<ChatDialogProps> = ({
                                     <div className={`bg-[#6f33b7] w-13 flex items-center justify-center p-3 `}>
                                         <Logo />
                                     </div>
-                                    <span className="text-sm font-semibold">Eloquent AI responds instantly</span>
+                                    <span className="text-sm font-semibold">AI Assistant responds instantly</span>
                                     <span className="text-sm font-extralight">Ask me anything</span>
                                 </div> : null
                         }
@@ -158,7 +158,7 @@ const ChatDialog: React.FC<ChatDialogProps> = ({
                 <div className={`bg-gray-200 size-6 rounded-full flex items-center justify-center p-1 `}>
                     <Logo fill="#c1c4c9" width="18" height="18" />
                 </div>
-                <span>Powered by Eloquent AI</span>
+                <span>Powered by Hasham.live</span>
             </div>
         </div>
     )
